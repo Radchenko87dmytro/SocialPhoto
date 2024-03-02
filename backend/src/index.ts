@@ -1,13 +1,16 @@
+import { validateData } from "./validators/index";
 import express, { Express } from "express";
 import cors from "cors";
 import { userModel } from "./schema";
+import { router } from "./routes";
 
 const app: Express = express();
 app.use(cors());
 app.use(express.json());
+app.use(validateData);
 const port = 4000;
 
-app.use("/");
+app.use("/", router);
 
 run().catch((err) => console.log(err));
 
