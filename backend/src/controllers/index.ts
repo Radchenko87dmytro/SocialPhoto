@@ -1,23 +1,27 @@
-import express, { Request, Response } from "express";
+import { userValidator } from "./../validators/user";
+import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import { userModel } from "../schema";
+import { v4 as uuidv4 } from "uuid";
 
 class UserController {
-  async createUser(req: Request, res: Response) {
+  async createUser(req: Request, userValidator: string | any, res: Response) {
     try {
-      const { username, email, password, profileUrl, bio } = req.body;
+      const { id, username, email, password, profileUrl, bio } = req.body;
       const newUser = await userModel.create({
+        id: `${uuidv4()}`,
         username,
         email,
         password,
         profileUrl,
         bio,
       });
-
+      console.log(newUser);
       return res.status(200).json({
         message: "User created succsessfully",
         data: newUser,
       });
+      console.log(newUser);
     } catch (e) {
       return res.status(500).json({ message: "Server Error", data: e });
     }
