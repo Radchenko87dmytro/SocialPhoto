@@ -3,7 +3,7 @@ import { UserType } from "../types";
 
 export const userSchema = new Schema<UserType>(
   {
-    id: { type: String, required: true },
+    
     username: { type: String, require: true },
     email: { type: String, require: true },
     password: { type: String, require: true },

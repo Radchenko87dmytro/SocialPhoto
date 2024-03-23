@@ -1,28 +1,31 @@
-import { userValidator } from "./../validators/user";
-import express, { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
+import { databaseResponseParser, deepCopyParser } from "./../common/index";
+import { userSchemaValidator } from "../validators/user";
+import { Request, Response } from "express";
 import { userModel } from "../schema";
-import { v4 as uuidv4 } from "uuid";
 
 class UserController {
-  async createUser(req: Request, userValidator: string | any, res: Response) {
+  async createUser(req: Request, res: Response) {
     try {
-      const { id, username, email, password, profileUrl, bio } = req.body;
+      const { _id, username, email, password, profileUrl, bio } = req.body;
+
+      const { error, value } = userSchemaValidator.validate(req.body);
+      if (error) throw Error(error.details[0].message);
+
       const newUser = await userModel.create({
-        id: `${uuidv4()}`,
+        _id,
         username,
         email,
         password,
         profileUrl,
         bio,
       });
-      console.log(newUser);
+
       return res.status(200).json({
         message: "User created succsessfully",
-        data: newUser,
+        data: databaseResponseParser(deepCopyParser(newUser)),
       });
-      console.log(newUser);
     } catch (e) {
+      console.error(e);
       return res.status(500).json({ message: "Server Error", data: e });
     }
   }
@@ -32,7 +35,7 @@ class UserController {
       let users = await userModel.find();
       return res.status(200).json({
         message: "Users gets succsessfully",
-        data: users,
+        data: databaseResponseParser(deepCopyParser(users)),
       });
     } catch (e) {
       return res.status(500).json({ message: "Server Error", data: e });
@@ -41,15 +44,37 @@ class UserController {
 
   async getUser(req: Request, res: Response) {
     try {
-      const userId = req.params.id;
-      const user = await userModel.findById(userId);
-      if (!user) {
-        return res.status(404).json({ message: "User not found", data: user });
+      const { value } = req.params;
+
+      let foundUser: null | any = null;
+      // const regex = new RegExp(
+      //   "/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i"
+      // );
+
+      // const regex =
+      //   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+      // if (regex.test(value)) {
+      //   foundUser = await userModel.findById(value);
+      //   console.log("value is valid");
+      // } else {
+      //   console.log("value errror");
+      // }
+
+      foundUser = await userModel.findById(value);
+
+      if (!foundUser) {
+        return res.status(404).json({
+          message: "User not found",
+          data: foundUser,
+        });
       }
+
       res.status(200).json({
         message: "User found",
-        data: user,
+        data: databaseResponseParser(deepCopyParser(foundUser)),
       });
+      console.log(databaseResponseParser(deepCopyParser(foundUser)));
     } catch (e) {
       return res.status(500).json({ message: "Server Error", data: e });
     }
@@ -57,7 +82,7 @@ class UserController {
 
   async updateUser(req: Request, res: Response) {
     try {
-      const userId = req.params.id;
+      const userId = req.params._id;
       const { username, email, password, profileUrl, bio } = req.body;
 
       const user = await userModel.findByIdAndUpdate(
@@ -72,7 +97,7 @@ class UserController {
 
       res.status(200).json({
         message: "User updated successfully",
-        data: user,
+        data: databaseResponseParser(deepCopyParser(user)),
       });
     } catch (e) {
       return res.status(500).json({ message: "Server Error", data: e });
@@ -81,7 +106,7 @@ class UserController {
 
   async deleateUser(req: Request, res: Response) {
     try {
-      const userId = req.params.id;
+      const userId = req.params._id;
       const user = await userModel.findByIdAndDelete(userId);
 
       if (!user) {
@@ -90,7 +115,7 @@ class UserController {
 
       return res.status(200).json({
         message: "User deleted successfully",
-        data: user,
+        data: databaseResponseParser(deepCopyParser(user)),
       });
     } catch (e) {
       return res.status(500).json({ message: "Server Error", data: e });
