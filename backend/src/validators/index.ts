@@ -1,4 +1,3 @@
-import { userModel } from "../schema";
 import { Request, Response } from "express";
 
 export const validateData = (req: Request, res: Response) => {
