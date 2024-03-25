@@ -10,7 +10,7 @@ const DB_URL = `mongodb+srv://dima:8326@cluster0.m6o8v9k.mongodb.net/?retryWrite
 const app: Express = express();
 app.use(cors());
 app.use(express.json());
-//app.use(validateData);
+//app.use(validateData)
 
 const port = 4000;
 
