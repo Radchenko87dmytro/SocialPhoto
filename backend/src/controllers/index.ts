@@ -30,6 +30,7 @@ class UserController {
       });
     } catch (e) {
       console.log((e as any).message);
+      console.log(e);
       return res
         .status(500)
         .json({ message: "Server Error", data: (e as ErrorType).message });
@@ -94,6 +95,12 @@ class UserController {
     try {
       const userId = req.params._id;
       const { username, email, password, profileUrl, bio } = req.body;
+
+      const { error, value } = userSchemaValidator.validate(req.body);
+      if (error) {
+        console.log("Error message:", error.details[0].message);
+        throw Error(error.details[0].message);
+      }
 
       const user = await userModel.findByIdAndUpdate(
         userId,
