@@ -2,6 +2,7 @@ import { databaseResponseParser, deepCopyParser } from "./../common/index";
 import { userSchemaValidator } from "../validators/user";
 import { Request, Response } from "express";
 import { userModel } from "../schema";
+import { ErrorType } from "../types";
 
 class UserController {
   async createUser(req: Request, res: Response) {
@@ -9,7 +10,10 @@ class UserController {
       const { _id, username, email, password, profileUrl, bio } = req.body;
 
       const { error, value } = userSchemaValidator.validate(req.body);
-      if (error) throw Error(error.details[0].message);
+      if (error) {
+        console.log("Error message:", error.details[0].message);
+        throw Error(error.details[0].message);
+      }
 
       const newUser = await userModel.create({
         _id,
@@ -25,8 +29,10 @@ class UserController {
         data: databaseResponseParser(deepCopyParser(newUser)),
       });
     } catch (e) {
-      console.error(e);
-      return res.status(500).json({ message: "Server Error", data: e });
+      console.log((e as any).message);
+      return res
+        .status(500)
+        .json({ message: "Server Error", data: (e as ErrorType).message });
     }
   }
 
@@ -38,7 +44,9 @@ class UserController {
         data: databaseResponseParser(deepCopyParser(users)),
       });
     } catch (e) {
-      return res.status(500).json({ message: "Server Error", data: e });
+      return res
+        .status(500)
+        .json({ message: "Server Error", data: (e as ErrorType).message });
     }
   }
 
@@ -76,7 +84,9 @@ class UserController {
       });
       console.log(databaseResponseParser(deepCopyParser(foundUser)));
     } catch (e) {
-      return res.status(500).json({ message: "Server Error", data: e });
+      return res
+        .status(500)
+        .json({ message: "Server Error", data: (e as ErrorType).message });
     }
   }
 
@@ -100,7 +110,9 @@ class UserController {
         data: databaseResponseParser(deepCopyParser(user)),
       });
     } catch (e) {
-      return res.status(500).json({ message: "Server Error", data: e });
+      return res
+        .status(500)
+        .json({ message: "Server Error", data: (e as ErrorType).message });
     }
   }
 
@@ -118,7 +130,10 @@ class UserController {
         data: databaseResponseParser(deepCopyParser(user)),
       });
     } catch (e) {
-      return res.status(500).json({ message: "Server Error", data: e });
+      console.log((e as any).message);
+      return res
+        .status(500)
+        .json({ message: "Server Error", data: (e as ErrorType).message });
     }
   }
 }

@@ -8,3 +8,8 @@ export interface UserType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ErrorType {
+  status: number;
+  message: string;
+}
