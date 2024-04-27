@@ -1,12 +1,27 @@
 import { databaseResponseParser, deepCopyParser } from "./../common/index";
 import { userSchemaValidator } from "../validators/user";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { userModel } from "../schema";
 import { ErrorType } from "../types";
 
+
+
 class UserController {
+  
+
   async createUser(req: Request, res: Response) {
+
     try {
+      //if (req.params ===  )
+
+      const e = new Error("Endpoint Not Found") as any;
+      if (e) {
+        return res.status(400).json({
+          message: "Endpoint Not Found",
+          data: e,
+        });
+      }
+
       const { _id, username, email, password, profileUrl, bio } = req.body;
 
       const { error, value } = userSchemaValidator.validate(req.body);
@@ -37,8 +52,22 @@ class UserController {
     }
   }
 
-  async getAllUsers(req: Request, res: Response) {
+  async getAllUsers(req: Request, res: Response, next: NextFunction) {
     try {
+      // const error = new Error("Not Found") as any;
+      // console.log("error", error);
+      // if (error) {
+      //   return res.status(404).json({
+      //     message: "Endpoint not found",
+      //     data: (error as ErrorType).message,
+      //   });
+      //   next(error);
+      // }
+
+      // const error = new Error("Not Found") as any;
+      // error.status = 404;
+      // next(error);
+
       let users = await userModel.find();
       return res.status(200).json({
         message: "Users gets succsessfully",
@@ -71,7 +100,7 @@ class UserController {
       // }
 
       foundUser = await userModel.findById(value);
-
+      console.log("test:", foundUser);
       if (!foundUser) {
         return res.status(404).json({
           message: "User not found",
@@ -84,6 +113,7 @@ class UserController {
         data: databaseResponseParser(deepCopyParser(foundUser)),
       });
       console.log(databaseResponseParser(deepCopyParser(foundUser)));
+      console.log();
     } catch (e) {
       return res
         .status(500)
