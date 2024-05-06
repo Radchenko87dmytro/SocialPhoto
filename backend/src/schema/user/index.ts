@@ -1,9 +1,8 @@
 import { Schema, model } from "mongoose";
-import { UserType } from "../types";
+import { UserType } from "../../types";
 
 export const userSchema = new Schema<UserType>(
   {
-    
     username: { type: String, require: true },
     email: { type: String, require: true },
     password: { type: String, require: true },

@@ -1,8 +1,8 @@
 import { validateData } from "./validators/index";
 import express, { Express } from "express";
 import cors from "cors";
-import { userModel } from "./schema";
-import { router } from "./routes";
+import { userModel } from "./schema/user";
+import { router } from "./routes/user";
 import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
 
