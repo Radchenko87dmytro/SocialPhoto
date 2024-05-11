@@ -2,9 +2,11 @@ import { validateData } from "./validators/index";
 import express, { Express } from "express";
 import cors from "cors";
 import { userModel } from "./schema/user";
-import { router } from "./routes/user";
+import { router as userRouter } from "./routes/user";
+import { router as postRouter } from "./routes/post";
 import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
+import validatorConttroller from "./controllers/user/index";
 
 const DB_URL = `mongodb+srv://dima:8326@cluster0.m6o8v9k.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -19,9 +21,11 @@ app.use(express.json());
 // });
 
 const port = 4000;
+const router = express.Router();
 
-app.use("/", router);
-
+app.use("/", userRouter);
+app.use("/", postRouter);
+app.use(router.all("*", validatorConttroller.getEnpointNotFound));
 run().catch((err) => console.log(err));
 
 async function run() {

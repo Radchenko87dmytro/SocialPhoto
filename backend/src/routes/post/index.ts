@@ -9,4 +9,3 @@ router.get("/posts", Post.getAllPosts);
 router.get("/post/:id", Post.getPost);
 router.put("/post/:id", Post.updatePost);
 router.delete("/post/:id", Post.deletePost);
-router.all("*");

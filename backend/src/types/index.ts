@@ -9,6 +9,16 @@ export interface UserType {
   updatedAt: string;
 }
 
+export interface PostType {
+  _id: string;
+  id: string;
+  linkUrl?: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
+}
+
 export interface ErrorType {
   status: number;
   message: string;
