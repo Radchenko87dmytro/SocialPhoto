@@ -1,5 +1,5 @@
 import { databaseResponseParser, deepCopyParser } from "./../common/index";
-import { userSchemaValidator } from "../validators/user";
+import { userSchemaValidator } from "../validators/user/user";
 import { NextFunction, Request, Response } from "express";
 import { userModel } from "../schema/user";
 import { ErrorType } from "../types";

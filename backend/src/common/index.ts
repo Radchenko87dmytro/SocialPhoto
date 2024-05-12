@@ -8,9 +8,7 @@ export interface responseDB {
   __v?: number;
 }
 
-export const databaseResponseParser = (
-  data: responseDB | responseDB[] | PostType
-) => {
+export const databaseResponseParser = (data: responseDB | responseDB[]) => {
   if (Array.isArray(data)) {
     return data.map((i: responseDB) => {
       delete i.__v;
@@ -20,12 +18,12 @@ export const databaseResponseParser = (
     });
   }
   delete data.__v;
-  data._id = data.id;
-  delete data.id;
+  data.id = data._id;
+  delete data._id;
   //console.log('database', data);
   return data;
 };
 
-export const deepCopyParser = (data: responseDB | responseDB[] | PostType) => {
+export const deepCopyParser = (data: responseDB | responseDB[]) => {
   return JSON.parse(JSON.stringify(data));
 };
