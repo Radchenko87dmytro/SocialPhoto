@@ -29,7 +29,7 @@ class UserController {
         data: databaseResponseParser(deepCopyParser(newUser)),
       });
     } catch (e) {
-      console.log((e as any).message);
+      //console.log((e as any).message);
       console.log(e);
       return res
         .status(500)
@@ -56,19 +56,6 @@ class UserController {
       const { value } = req.params;
 
       let foundUser: null | any = null;
-      // const regex = new RegExp(
-      //   "/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i"
-      // );
-
-      // const regex =
-      //   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-      // if (regex.test(value)) {
-      //   foundUser = await userModel.findById(value);
-      //   console.log("value is valid");
-      // } else {
-      //   console.log("value errror");
-      // }
 
       foundUser = await userModel.findById(value);
       console.log("test:", foundUser);
@@ -84,7 +71,6 @@ class UserController {
         data: databaseResponseParser(deepCopyParser(foundUser)),
       });
       console.log(databaseResponseParser(deepCopyParser(foundUser)));
-      console.log();
     } catch (e) {
       return res
         .status(500)

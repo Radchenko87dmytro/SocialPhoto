@@ -12,8 +12,8 @@ export const databaseResponseParser = (data: responseDB | responseDB[]) => {
   if (Array.isArray(data)) {
     return data.map((i: responseDB) => {
       delete i.__v;
-      i._id = i.id;
-      delete i.id;
+      i.id = i._id;
+      delete i._id;
       return i;
     });
   }
