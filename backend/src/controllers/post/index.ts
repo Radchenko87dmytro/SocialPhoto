@@ -8,7 +8,7 @@ import { postSchemaValidator } from "../../validators/post";
 class PostController {
   async createPost(req: Request, res: Response) {
     try {
-      const { linkUrl, content } = req.body;
+      const { linkUrl, content, userId } = req.body;
 
       const { error, value } = postSchemaValidator.validate(req.body);
       if (error) {
@@ -19,6 +19,7 @@ class PostController {
       const newPost = await postModel.create({
         linkUrl,
         content,
+        userId,
       });
       console.log(newPost);
       return res.status(200).json({

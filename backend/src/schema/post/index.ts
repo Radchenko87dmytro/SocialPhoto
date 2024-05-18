@@ -6,6 +6,7 @@ export const postSchema = new Schema<PostType>(
     id: { type: String, require: true },
     linkUrl: { type: String, require: true },
     content: { type: String, require: true },
+    userId: { type: String, require: true },
     createdAt: { type: String, required: false },
     updatedAt: { type: String, required: false },
   },
