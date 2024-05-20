@@ -30,6 +30,20 @@ export interface CommentType {
   __v?: number;
 }
 
+export interface ReactionType {
+  _id: string;
+  id: string;
+  postId: string;
+  commentId: string;
+  userId: string;
+  reactionType: number;
+  parentType: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  //__v?: number;
+}
+
 export interface ErrorType {
   status: number;
   message: string;

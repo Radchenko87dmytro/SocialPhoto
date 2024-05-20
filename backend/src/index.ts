@@ -1,5 +1,6 @@
 import express, { Express } from "express";
 import cors from "cors";
+import { router as reactionRouter } from "./routes/reaction";
 import { router as userRouter } from "./routes/user";
 import { router as postRouter } from "./routes/post";
 import { router as commentRouter } from "./routes/comment";
@@ -25,6 +26,7 @@ const router = express.Router();
 app.use("/", userRouter);
 app.use("/", postRouter);
 app.use("/", commentRouter);
+app.use("/", reactionRouter);
 
 app.use(router.all("*", validatorConttroller.getEnpointNotFound));
 run().catch((err) => console.log(err));
